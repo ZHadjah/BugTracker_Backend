@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace bug_tracker_react.Models
+namespace BugTracker_Backend.Models
 {
     public class BTUser : IdentityUser
     {
