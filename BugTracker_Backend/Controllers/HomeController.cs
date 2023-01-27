@@ -4,6 +4,7 @@ using System.Diagnostics;
 
 namespace BugTracker_Backend.Controllers
 {
+    [ApiController]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

@@ -65,7 +65,6 @@ namespace BugTracker_Backend.Models
         {
             RuleFor(x => x.Title).NotNull();
             RuleFor(x => x.Title).Length(3, 50);
-
             RuleFor(x => x.Description).NotNull();
             RuleFor(x => x.Created).NotNull();
         }
