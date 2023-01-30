@@ -14,6 +14,8 @@ namespace BugTracker_Backend.Models
 
         //Navigation Properties
         public ICollection<BTUser> Members { get; set; }
-        public ICollection<Project> Projects { get; set; } 
+        public ICollection<Project> Projects { get; set; }
+        public ICollection<Invite> Invites { get; set; }
+
     }
 }

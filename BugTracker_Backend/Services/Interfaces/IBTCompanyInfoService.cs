@@ -10,7 +10,7 @@ namespace BugTracker_Backend.Services.Interfaces
 
         public Task<List<Project>> GetAllProjectsAsync(int companyId);
 
-        public Task<List<Ticket>> GetAllTickets(int companyId);
+        public Task<List<Ticket>> GetAllTicketsAsync(int companyId);
 
         
     }
