@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BugTrackerBackend.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class fixednotif : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -404,8 +404,8 @@ namespace BugTrackerBackend.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     TicketId = table.Column<int>(type: "integer", nullable: false),
-                    Title = table.Column<int>(type: "integer", nullable: false),
-                    Message = table.Column<int>(type: "integer", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Message = table.Column<string>(type: "text", nullable: false),
                     Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     RecipientId = table.Column<string>(type: "text", nullable: false),
                     SenderId = table.Column<string>(type: "text", nullable: false),

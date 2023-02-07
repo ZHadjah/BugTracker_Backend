@@ -1,3 +1,8 @@
+using BugTracker_Backend.Data;
+using BugTracker_Backend.Models;
+using BugTracker_Backend.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
+
 namespace BugTracker_Backend.Services
 {
     public class BTInviteService : IBTInviteService
@@ -9,7 +14,7 @@ namespace BugTracker_Backend.Services
             _context = context;
         }
 
-        public async bool AcceptInviteAsync(Guid? token, string userId, int companyId)
+        public async Task<bool> AcceptInviteAsync(Guid? token, string userId, int companyId)
         {
             Invite invite = await _context.Invites.FirstOrDefaultAsync(i => i.CompanyToken == token);
 
@@ -20,7 +25,7 @@ namespace BugTracker_Backend.Services
 
             try
             {
-                invite.isValid = false;
+                invite.IsValid = false;
                 invite.InviteeId = userId;
                 await _context.SaveChangesAsync();
 
@@ -33,23 +38,7 @@ namespace BugTracker_Backend.Services
             }
         }
 
-        public async AddNewInviteAsync(Invite invite)
-        {
-            try
-            {
-                invite.isValid = false;
-                invite.InviteeId = userId;
-                await _context.SaveChangesAsync();
-
-                return true;
-            }
-            catch (Exception)
-            {
-                
-                throw;
-            }
-        }
-        public async bool AddInviteAsync(Guid? token, string email int companyId)
+        public async Task AddNewInviteAsync(Invite invite)
         {
             try
             {
@@ -58,20 +47,18 @@ namespace BugTracker_Backend.Services
             }
             catch (Exception)
             {
-                
                 throw;
             }
         }
 
-
-        public bool AnyInviteAsync(Guid token, string email, int companyId)
+        public async Task<bool> AnyInviteAsync(Guid token, string email, int companyId)
         {
             try
             {
-                bool result = await _context.Invites.Where(i=> i.companyId == companyId)
-                                                    .AnyAsync(i => i.CompanyToken == token && i.inviteeEmail == email); 
+                bool result = await _context.Invites.Where(i=> i.CompanyId == companyId)
+                                                    .AnyAsync(i => i.CompanyToken == token && i.InviteeEmail == email); 
                                                     
-                return invite;
+                return result;
             }
             catch (Exception)
             {
@@ -79,13 +66,11 @@ namespace BugTracker_Backend.Services
             }
         }
 
-
-
         public async Task<Invite> GetInviteAsync(int inviteId, int companyId)
         {
             try
             {
-                Invite invite = await _context.Invites.Where(i=> i.companyId == companyId)
+                Invite invite = await _context.Invites.Where(i=> i.CompanyId == companyId)
                                                     .Include(i => i.Company)
                                                     .Include(i => i.Project)
                                                     .Include(i => i.Invitor)
@@ -104,11 +89,11 @@ namespace BugTracker_Backend.Services
         {
             try
             {
-                Invite invite = await _context.Invites.Where(i=> i.companyId == companyId)
+                Invite invite = await _context.Invites.Where(i=> i.CompanyId == companyId)
                                                     .Include(i => i.Company)
                                                     .Include(i => i.Project)
                                                     .Include(i => i.Invitor)
-                                                    .FirstOrDefaultAsync(i => i.CompanyToken == token && i.inviteeEmail == email);
+                                                    .FirstOrDefaultAsync(i => i.CompanyToken == token && i.InviteeEmail == email);
                                                     
                 return invite;
             }
@@ -118,7 +103,7 @@ namespace BugTracker_Backend.Services
             }
         }
 
-        public bool ValidateInviteCodeAsync(Guid? token)
+        public async Task<bool> ValidateInviteCodeAsync(Guid? token)
         {
             if(token == null)
             {
@@ -134,13 +119,15 @@ namespace BugTracker_Backend.Services
                 //determine invite date
                 DateTime inviteDate = invite.InviteDate.DateTime;
 
+                bool validDate = (DateTime.Now - inviteDate).TotalDays <= 7;
+
                 if(validDate)
                 {
-                    result = invite.isValid;
+                    result = invite.IsValid;
                 }
-
-                return result;
             }
+            return result;
+
         }
     }
 }

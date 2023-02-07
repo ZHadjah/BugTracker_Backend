@@ -10,7 +10,6 @@ namespace BugTracker_Backend.Data
             : base(options)
         {
         }
-
         public DbSet<Company> Companies { get; set; }
         public DbSet<Invite> Invites { get; set; }
         public DbSet<Project> Projects { get; set; }

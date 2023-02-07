@@ -12,10 +12,10 @@ namespace BugTracker_Backend.Models
         public int TicketId { get; set; }
 
         [DisplayName("Title")]
-        public int Title { get; set; }
+        public string Title { get; set; }
 
         [DisplayName("Message")]
-        public int Message { get; set; }
+        public string Message { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayName("Date")]

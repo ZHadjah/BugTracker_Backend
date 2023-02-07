@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace BugTracker_Backend.Models.Enums
 {
-    public enum BTTicketStatus()
+    public enum BTTicketStatus
     {
         New,
-        Developement, 
+        Development, 
         Testing,
         Resolved
     }

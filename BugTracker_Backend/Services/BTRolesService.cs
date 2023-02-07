@@ -2,6 +2,7 @@
 using BugTracker_Backend.Models;
 using BugTracker_Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace BugTracker_Backend.Services
 {
@@ -76,5 +77,24 @@ namespace BugTracker_Backend.Services
             bool result = (await _userManager.RemoveFromRolesAsync(user, roles)).Succeeded;
             return result;
         }
+
+        #region Get Roles
+        public async Task<List<IdentityRole>> GetRolesAsync()
+        {
+            try
+            {
+                List<IdentityRole> result = new();
+
+                result = await _context.Roles.ToListAsync();
+
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        } 
+        #endregion
+
     }
 }

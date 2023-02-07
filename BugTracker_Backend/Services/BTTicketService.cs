@@ -32,7 +32,7 @@ namespace BugTracker_Backend.Services
                 _context.Add(ticket);
                 await _context.SaveChangesAsync();
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 throw;
             }            
@@ -46,7 +46,7 @@ namespace BugTracker_Backend.Services
                 _context.Update(ticket);
                 await _context.SaveChangesAsync();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }           
@@ -69,7 +69,7 @@ namespace BugTracker_Backend.Services
                         await _context.SaveChangesAsync();
                     }
 
-                    catch(Exception ex) 
+                    catch(Exception) 
                     {
                         throw;
                     }

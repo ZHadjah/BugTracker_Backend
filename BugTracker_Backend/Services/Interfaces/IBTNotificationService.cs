@@ -2,7 +2,7 @@ using BugTracker_Backend.Models;
 
 namespace BugTracker_Backend.Services.Interfaces
 {
-    public interface IBTNotification
+    public interface IBTNotificationService
     {
         public Task AddNotificationAsync(Notification notification);
 
@@ -10,7 +10,7 @@ namespace BugTracker_Backend.Services.Interfaces
 
         public Task<List<Notification>> GetSentNotificationAsync(string userId);
 
-        public Task<bool> SendEmailNotificationAsync(string userId);
+        public Task<bool> SendEmailNotificationAsync(Notification notification, string emailSubject);
 
         public Task SendEmailNotificationsByRoleAsync(Notification notification, int companyId, string role);
 

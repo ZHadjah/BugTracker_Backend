@@ -1,3 +1,4 @@
+using BugTracker_Backend.Services.Interfaces;
 using System.IO;
 
 
@@ -22,7 +23,7 @@ namespace BugTracker_Backend.Services
             }
         }
 
-        public Task<byte[]> ConvertFileToByteArrayAsync(IFormFile file)
+        public async Task<byte[]> ConvertFileToByteArrayAsync(IFormFile file)
         {
             try
             {
@@ -62,7 +63,7 @@ namespace BugTracker_Backend.Services
             if(!string.IsNullOrWhiteSpace(file))
             {
                 fileImage = Path.GetExtension(file).Replace(".", "");
-                return $"/img/png/{fileImage}.png"
+                return $"/img/png/{fileImage}.png";
             }
             return fileImage;
         }

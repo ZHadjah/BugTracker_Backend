@@ -1,6 +1,9 @@
 ﻿using BugTracker_Backend.Models;
+using MailKit.Security;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
+using MimeKit;
+using MailKit.Net.Smtp;
 
 namespace BugTracker_Backend.Services
 {
@@ -18,7 +21,7 @@ namespace BugTracker_Backend.Services
             MimeMessage email = new();
 
             email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
-            email.To.Add(MailboxAddress.Parse(_emailTo));
+            email.To.Add(MailboxAddress.Parse(emailTo));
             email.Subject = subject;
 
             var builder = new BodyBuilder
@@ -27,6 +30,7 @@ namespace BugTracker_Backend.Services
             };
 
             email.Body = builder.ToMessageBody();
+
             try
             {
                 using var smtp = new SmtpClient();

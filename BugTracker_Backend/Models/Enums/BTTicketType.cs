@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BugTracker_Backend.Models.Enums
 {
-    public enum BTTicketType()
+    public enum BTTicketType
     {
         NewDevelopment,
         WorkTask,

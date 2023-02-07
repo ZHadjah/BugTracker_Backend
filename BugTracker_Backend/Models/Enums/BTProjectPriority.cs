@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace BugTracker_Backend.Models.Enums
 {
-    public enum BTProjectPriority()
+    public enum BTProjectPriority
     {
         Low,
         Medium, 
         High,
-        Ugrent
+        Urgent
     }
 }

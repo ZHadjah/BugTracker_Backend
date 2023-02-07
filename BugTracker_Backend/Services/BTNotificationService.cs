@@ -2,6 +2,7 @@ using BugTracker_Backend.Data;
 using BugTracker_Backend.Models;
 using BugTracker_Backend.Models.Enums;
 using BugTracker_Backend.Services.Interfaces;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -26,7 +27,7 @@ namespace BugTracker_Backend.Services
             _rolesService = rolesService;
         }
 
-        public async AddNotificationAsync(Notification notification)
+        public async Task AddNotificationAsync(Notification notification)
         {
             try
             {
@@ -39,7 +40,7 @@ namespace BugTracker_Backend.Services
             }
         }
 
-        public async List<Notification> GetRecievedNotificationsAsync(string userId)
+        public async Task<List<Notification>> GetRecievedNotificationsAsync(string userId)
         {
             try
             {
@@ -47,7 +48,7 @@ namespace BugTracker_Backend.Services
                                                                  .Include(n=>n.Recipient)
                                                                  .Include(n=>n.Sender)
                                                                  .Include(n=>n.Ticket)
-                                                                    .ThenInclude(t => t.project)
+                                                                    .ThenInclude(t => t.Project)
                                                                  .Where(n=> n.RecipientId == userId).ToListAsync();
 
                 return notifications;
@@ -58,7 +59,7 @@ namespace BugTracker_Backend.Services
             }
         }
 
-        public async List<Notification> GetSentNotificationAsync(string userId)
+        public async Task<List<Notification>> GetSentNotificationAsync(string userId)
         {
             try
             {
@@ -66,7 +67,7 @@ namespace BugTracker_Backend.Services
                                                                  .Include(n=>n.Recipient)
                                                                  .Include(n=>n.Sender)
                                                                  .Include(n=>n.Ticket)
-                                                                    .ThenInclude(t => t.project)
+                                                                    .ThenInclude(t => t.Project)
                                                                  .Where(n=> n.SenderId == userId).ToListAsync();
 
                 return notifications;
@@ -77,13 +78,13 @@ namespace BugTracker_Backend.Services
             }
         }
 
-        public async Task<bool> SendEmailNotificationAsync(string userId)
+        public async Task<bool> SendEmailNotificationAsync(Notification notification, string emailSubject)
         {
             BTUser btUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == notification.RecipientId);
 
-            if(BTUser != null)
+            if (btUser != null)
             {
-                string btUserEmail = BTUser.Email;
+                string btUserEmail = btUser.Email;
                 string message = notification.Message;
 
                 //Send Email
@@ -97,14 +98,14 @@ namespace BugTracker_Backend.Services
                     throw;
                 }
             }
-            else 
+            else
             {
                 return false;
             }
 
         }
 
-        public Task SendEmailNotificationsByRoleAsync(Notification notification, int companyId, string role)
+        public async Task SendEmailNotificationsByRoleAsync(Notification notification, int companyId, string role)
         {
             try
             {
@@ -113,7 +114,7 @@ namespace BugTracker_Backend.Services
                 foreach(BTUser btUser in members)
                 {
                     notification.RecipientId = btUser.Id;
-                    await SendEmailNotificationAsync(notification, notification.Title);
+                    //await SendEmailNotificationAsync(notification, notification.Title);
                 }
             }
             catch (Exception)
@@ -123,7 +124,7 @@ namespace BugTracker_Backend.Services
         }
 
 
-        public async SendMembersEmailNotificationsAsync(Notification notification, List<BTUser> members)
+        public async Task SendMembersEmailNotificationsAsync(Notification notification, List<BTUser> members)
         {
             try
             {

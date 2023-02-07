@@ -215,8 +215,9 @@ namespace BugTrackerBackend.Migrations
                     b.Property<DateTimeOffset>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Message")
-                        .HasColumnType("integer");
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("RecipientId")
                         .IsRequired()
@@ -229,8 +230,9 @@ namespace BugTrackerBackend.Migrations
                     b.Property<int>("TicketId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Title")
-                        .HasColumnType("integer");
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<bool>("Viewed")
                         .HasColumnType("boolean");
@@ -708,7 +710,7 @@ namespace BugTrackerBackend.Migrations
             modelBuilder.Entity("BugTracker_Backend.Models.Invite", b =>
                 {
                     b.HasOne("BugTracker_Backend.Models.Company", "Company")
-                        .WithMany()
+                        .WithMany("Invites")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -945,6 +947,8 @@ namespace BugTrackerBackend.Migrations
 
             modelBuilder.Entity("BugTracker_Backend.Models.Company", b =>
                 {
+                    b.Navigation("Invites");
+
                     b.Navigation("Members");
 
                     b.Navigation("Projects");
