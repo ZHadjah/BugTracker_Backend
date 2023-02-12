@@ -43,15 +43,15 @@ builder.Services.AddSwaggerGen();
 var provider = builder.Services.BuildServiceProvider();
 var configuration = provider.GetService<IConfiguration>();
 
-//builder.Services.AddCors(options =>
-//{
-//    var frontendURL = configuration.GetValue<string>("frontend_url");
+builder.Services.AddCors(options =>
+{
+    var frontendURL = configuration.GetValue<string>("frontend_url");
 
-//    options.AddDefaultPolicy(builder =>
-//    {
-//        builder.WithOrigins(frontendURL).AllowAnyMethod().AllowAnyHeader();
-//    });
-//});
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins(frontendURL).AllowAnyMethod().AllowAnyHeader();
+    });
+});
 
 var app = builder.Build();
 await DataUtility.ManageDataAsync(app);
@@ -74,7 +74,7 @@ else
 }
 
 app.UseHttpsRedirection();
-//app.UseCors();
+app.UseCors();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
