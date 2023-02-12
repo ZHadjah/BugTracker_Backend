@@ -11,6 +11,7 @@ using BugTracker_Backend.Models;
 namespace BugTracker_Backend.Controllers
 {
     [ApiController]
+    [Route("[controller]")]
     public class NotificationsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -21,13 +22,16 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: Notifications
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Notifications.Include(n => n.Recipient).Include(n => n.Sender).Include(n => n.Ticket);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Notifications/Details/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Notifications == null)
@@ -48,7 +52,8 @@ namespace BugTracker_Backend.Controllers
             return View(notification);
         }
 
-        // GET: Notifications/Create
+        [HttpGet]
+        [Route("[action]")]
         public IActionResult Create()
         {
             ViewData["RecipientId"] = new SelectList(_context.Users, "Id", "Id");
@@ -62,6 +67,7 @@ namespace BugTracker_Backend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> Create([Bind("Id,TicketId,Title,Message,Created,RecipientId,SenderId,Viewed")] Notification notification)
         {
             if (ModelState.IsValid)
@@ -76,7 +82,8 @@ namespace BugTracker_Backend.Controllers
             return View(notification);
         }
 
-        // GET: Notifications/Edit/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Notifications == null)
@@ -100,6 +107,7 @@ namespace BugTracker_Backend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,TicketId,Title,Message,Created,RecipientId,SenderId,Viewed")] Notification notification)
         {
             if (id != notification.Id)
@@ -134,6 +142,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: Notifications/Delete/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Notifications == null)
@@ -157,6 +167,7 @@ namespace BugTracker_Backend.Controllers
         // POST: Notifications/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Notifications == null)
@@ -173,6 +184,8 @@ namespace BugTracker_Backend.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        [Route("[action]")]
         private bool NotificationExists(int id)
         {
           return (_context.Notifications?.Any(e => e.Id == id)).GetValueOrDefault();

@@ -11,6 +11,7 @@ using BugTracker_Backend.Models;
 namespace BugTracker_Backend.Controllers
 {
     [ApiController]
+    [Route("[controller]")]
     public class TicketsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -21,13 +22,24 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: Tickets
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Tickets.Include(t => t.DeveloperUser).Include(t => t.OwnerUser).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
-            return View(await applicationDbContext.ToListAsync());
+            //var applicationDbContext = await _context.Tickets.Include(t => t.DeveloperUser).Include(t => t.OwnerUser).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType).ToListAsync();
+            ////return View(await applicationDbContext.ToListAsync());
+            //return Ok(applicationDbContext);
+
+            var test = await _context.Tickets.Where(t => t.TicketPriorityId == 1).ToListAsync();
+            Response.Headers.Add("Access-Control-Expose-Headers", "Content-Range");
+
+            return Ok(test);
+
         }
 
         // GET: Tickets/Details/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Tickets == null)
@@ -52,6 +64,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: Tickets/Create
+        [HttpGet]
+        [Route("[action]")]
         public IActionResult Create()
         {
             ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id");
@@ -68,6 +82,7 @@ namespace BugTracker_Backend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> Create([Bind("Id,ProjectId,Title,Description,Created,Updated,Archived,TicketPriorityId,TicketStatusId,TicketTypeId,OwnerUserId,DeveloperUserId")] Ticket ticket)
         {
             if (ModelState.IsValid)
@@ -86,6 +101,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: Tickets/Edit/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Tickets == null)
@@ -112,6 +129,7 @@ namespace BugTracker_Backend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,ProjectId,Title,Description,Created,Updated,Archived,TicketPriorityId,TicketStatusId,TicketTypeId,OwnerUserId,DeveloperUserId")] Ticket ticket)
         {
             if (id != ticket.Id)
@@ -149,6 +167,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: Tickets/Delete/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Tickets == null)
@@ -175,6 +195,7 @@ namespace BugTracker_Backend.Controllers
         // POST: Tickets/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Tickets == null)
@@ -191,6 +212,8 @@ namespace BugTracker_Backend.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        [Route("[action]")]
         private bool TicketExists(int id)
         {
           return (_context.Tickets?.Any(e => e.Id == id)).GetValueOrDefault();

@@ -11,6 +11,7 @@ using BugTracker_Backend.Models;
 namespace BugTracker_Backend.Controllers
 {
     [ApiController]
+    [Route("[controller]")]
     public class InvitesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,14 +21,16 @@ namespace BugTracker_Backend.Controllers
             _context = context;
         }
 
-        // GET: Invites
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Invites.Include(i => i.Company).Include(i => i.Invitee).Include(i => i.Invitor).Include(i => i.Project);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Invites/Details/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Invites == null)
@@ -49,7 +52,8 @@ namespace BugTracker_Backend.Controllers
             return View(invite);
         }
 
-        // GET: Invites/Create
+        [HttpGet]
+        [Route("[action]")]
         public IActionResult Create()
         {
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id");
@@ -64,6 +68,7 @@ namespace BugTracker_Backend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> Create([Bind("Id,InviteDate,JoinDate,CompanyToken,CompanyId,ProjectId,InvitorId,InviteeId,InviteeEmail,InviteeFirstName,InviteeLastName,IsValid")] Invite invite)
         {
             if (ModelState.IsValid)
@@ -79,7 +84,8 @@ namespace BugTracker_Backend.Controllers
             return View(invite);
         }
 
-        // GET: Invites/Edit/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Invites == null)
@@ -104,6 +110,7 @@ namespace BugTracker_Backend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,InviteDate,JoinDate,CompanyToken,CompanyId,ProjectId,InvitorId,InviteeId,InviteeEmail,InviteeFirstName,InviteeLastName,IsValid")] Invite invite)
         {
             if (id != invite.Id)
@@ -138,7 +145,8 @@ namespace BugTracker_Backend.Controllers
             return View(invite);
         }
 
-        // GET: Invites/Delete/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Invites == null)
@@ -163,6 +171,7 @@ namespace BugTracker_Backend.Controllers
         // POST: Invites/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Invites == null)
@@ -179,6 +188,8 @@ namespace BugTracker_Backend.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        [Route("[action]")]
         private bool InviteExists(int id)
         {
           return (_context.Invites?.Any(e => e.Id == id)).GetValueOrDefault();

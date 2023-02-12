@@ -14,8 +14,12 @@ var connectionString = builder.Configuration.GetSection("pgSettings")["pgConnect
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(DataUtility.GetConnectionString(builder.Configuration), 
                                                     o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddIdentity<BTUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddClaimsPrincipalFactory<BTUserClaimsPrincipleFactory>();
 builder.Services.AddControllersWithViews();
@@ -32,13 +36,10 @@ builder.Services.AddScoped<IBTInviteService, BTInviteService>();
 builder.Services.AddScoped<IBTFileService, BTFileService>();
 builder.Services.AddScoped<IBTNotificationService, BTNotificationService>();
 builder.Services.AddScoped<IBTLookupService, BTLookupService>();
-
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.AddSwaggerGen();
 
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new() { Title = "BugTracker", Version = "v1" }); 
-});
+
 var provider = builder.Services.BuildServiceProvider();
 var configuration = provider.GetService<IConfiguration>();
 
@@ -59,6 +60,11 @@ await DataUtility.ManageDataAsync(app);
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
+    app.UseSwagger();
+    app.UseSwaggerUI(c => 
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "BugTracker_Backend v1");        
+    });
 }
 else
 {
@@ -73,8 +79,16 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-app.MapRazorPages();
+
+
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.UseRouting();
+app.UseEndpoints(builder => builder.MapControllers());
+
+
+
 app.Run();
+
+

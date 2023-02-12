@@ -243,7 +243,7 @@ namespace BugTracker_Backend.Services
 
             catch (Exception ex)
             {
-                Console.WriteLine($"**** Error **** - Error getting user projecta --> {ex.Message}");
+                Console.WriteLine($"**** Error **** - Error getting user projects --> {ex.Message}");
                 throw;
             }                       
         }

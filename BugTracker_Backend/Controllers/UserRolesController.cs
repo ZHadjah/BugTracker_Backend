@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BugTracker_Backend.Controllers
 {
     [ApiController]
+    [Route("[controller]")]
     public class UserRolesController : Controller
     {
         private readonly IBTRolesService _rolesService;
@@ -21,6 +22,7 @@ namespace BugTracker_Backend.Controllers
         }
 
         [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> ManageUserRoles()
         {
             List<ManageUserRolesViewModel> model= new();
@@ -44,6 +46,7 @@ namespace BugTracker_Backend.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> ManageUserRoles(ManageUserRolesViewModel member)
         {
             //gget company id

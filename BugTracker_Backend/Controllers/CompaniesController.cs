@@ -11,6 +11,7 @@ using BugTracker_Backend.Models;
 namespace BugTracker_Backend.Controllers
 {
     [ApiController]
+    [Route("[controller]")]
     public class CompaniesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,7 +21,8 @@ namespace BugTracker_Backend.Controllers
             _context = context;
         }
 
-        // GET: Companies
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Index()
         {
               return _context.Companies != null ? 
@@ -28,7 +30,8 @@ namespace BugTracker_Backend.Controllers
                           Problem("Entity set 'ApplicationDbContext.Companies'  is null.");
         }
 
-        // GET: Companies/Details/5
+        [HttpGet]
+        [Route("[action]/{id}")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Companies == null)
@@ -46,17 +49,17 @@ namespace BugTracker_Backend.Controllers
             return View(company);
         }
 
-        // GET: Companies/Create
+        [HttpGet]
+        [Route("[action]")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Companies/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("[action]/{company}")]
         public async Task<IActionResult> Create([Bind("Id,Name,Description")] Company company)
         {
             if (ModelState.IsValid)
@@ -68,7 +71,8 @@ namespace BugTracker_Backend.Controllers
             return View(company);
         }
 
-        // GET: Companies/Edit/5
+        [HttpGet]
+        [Route("[action]/{id}")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Companies == null)
@@ -89,6 +93,7 @@ namespace BugTracker_Backend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("[action]/{company}")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description")] Company company)
         {
             if (id != company.Id)
@@ -119,7 +124,8 @@ namespace BugTracker_Backend.Controllers
             return View(company);
         }
 
-        // GET: Companies/Delete/5
+        [HttpGet]
+        [Route("[action]/{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Companies == null)
@@ -140,6 +146,7 @@ namespace BugTracker_Backend.Controllers
         // POST: Companies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Route("[action]/{id}")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Companies == null)
@@ -156,6 +163,7 @@ namespace BugTracker_Backend.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Route("[action]")]
         private bool CompanyExists(int id)
         {
           return (_context.Companies?.Any(e => e.Id == id)).GetValueOrDefault();

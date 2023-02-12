@@ -41,10 +41,10 @@ namespace BugTracker_Backend.Models
         public int TicketTypeId { get; set; }
 
         [DisplayName("Ticket Owner")]
-        public string OwnerUserId { get; set; }
+        public string? OwnerUserId { get; set; }
 
         [DisplayName("Ticket Devleoper")]
-        public string DeveloperUserId { get; set; }
+        public string? DeveloperUserId { get; set; }
 
         //Navigation Properties
         public Project Project { get; set; }

@@ -20,11 +20,11 @@ namespace BugTracker_Backend.Models
 
         [DisplayName("Start Date")]
         [DataType(DataType.Date)]
-        public DateTimeOffset StartDate { get; set; }
+        public DateTime StartDate { get; set; }
 
         [DisplayName("End Date")]
         [DataType(DataType.Date)]
-        public DateTimeOffset EndDate { get; set; }
+        public DateTime EndDate { get; set; }
 
         [DisplayName("Priority")]
         public int? ProjectPriorityId { get; set; }
@@ -34,15 +34,15 @@ namespace BugTracker_Backend.Models
         public IFormFile ImageFormFile { get; set; }
 
         [DisplayName("File Name")]
-        public string ImageFileName { get; set; }
+        public string? ImageFileName { get; set; }
 
-        public byte[] ImageFileData { get; set; }
+        public byte[]? ImageFileData { get; set; }
 
         [DisplayName("File Extension")]
-        public string ImageContentType { get; set; }
+        public string? ImageContentType { get; set; }
 
         [DisplayName("Archived")]
-        public bool Archived { get; set; }
+        public bool? Archived { get; set; }
 
         //navigation properties
         public Company Company { get; set; }

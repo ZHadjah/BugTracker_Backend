@@ -11,6 +11,7 @@ using BugTracker_Backend.Models;
 namespace BugTracker_Backend.Controllers
 {
     [ApiController]
+    [Route("[controller]")]
     public class TicketPrioritiesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -21,6 +22,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: TicketPriorities
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Index()
         {
               return _context.TicketPriorities != null ? 
@@ -29,6 +32,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: TicketPriorities/Details/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.TicketPriorities == null)
@@ -47,6 +52,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: TicketPriorities/Create
+        [HttpGet]
+        [Route("[action]")]
         public IActionResult Create()
         {
             return View();
@@ -57,6 +64,7 @@ namespace BugTracker_Backend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> Create([Bind("Id,Name")] TicketPriority ticketPriority)
         {
             if (ModelState.IsValid)
@@ -69,6 +77,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: TicketPriorities/Edit/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.TicketPriorities == null)
@@ -89,6 +99,7 @@ namespace BugTracker_Backend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] TicketPriority ticketPriority)
         {
             if (id != ticketPriority.Id)
@@ -120,6 +131,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: TicketPriorities/Delete/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.TicketPriorities == null)
@@ -140,6 +153,7 @@ namespace BugTracker_Backend.Controllers
         // POST: TicketPriorities/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.TicketPriorities == null)
@@ -156,6 +170,8 @@ namespace BugTracker_Backend.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        [Route("[action]")]
         private bool TicketPriorityExists(int id)
         {
           return (_context.TicketPriorities?.Any(e => e.Id == id)).GetValueOrDefault();

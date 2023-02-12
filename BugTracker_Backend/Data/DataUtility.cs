@@ -209,6 +209,7 @@ namespace BugTracker_Backend.Data
 
                 var dbProjects = context.Projects.Select(c => c.Name).ToList();
                 await context.Projects.AddRangeAsync(projects.Where(c => !dbProjects.Contains(c.Name)));
+
                 await context.SaveChangesAsync();
             }
             catch (Exception ex)

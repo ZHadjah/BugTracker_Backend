@@ -11,6 +11,7 @@ using BugTracker_Backend.Models;
 namespace BugTracker_Backend.Controllers
 {
     [ApiController]
+    [Route("[controller]")]
     public class TicketCommentsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -21,6 +22,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: TicketComments
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.TicketComments.Include(t => t.Ticket).Include(t => t.User);
@@ -28,6 +31,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: TicketComments/Details/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.TicketComments == null)
@@ -48,6 +53,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: TicketComments/Create
+        [HttpGet]
+        [Route("[action]")]
         public IActionResult Create()
         {
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Id");
@@ -60,6 +67,7 @@ namespace BugTracker_Backend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> Create([Bind("Id,Comment,Created,TicketId,UserId")] TicketComment ticketComment)
         {
             if (ModelState.IsValid)
@@ -74,6 +82,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: TicketComments/Edit/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.TicketComments == null)
@@ -96,6 +106,7 @@ namespace BugTracker_Backend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Comment,Created,TicketId,UserId")] TicketComment ticketComment)
         {
             if (id != ticketComment.Id)
@@ -129,6 +140,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: TicketComments/Delete/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.TicketComments == null)
@@ -151,6 +164,7 @@ namespace BugTracker_Backend.Controllers
         // POST: TicketComments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.TicketComments == null)
@@ -167,6 +181,8 @@ namespace BugTracker_Backend.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        [Route("[action]")]
         private bool TicketCommentExists(int id)
         {
           return (_context.TicketComments?.Any(e => e.Id == id)).GetValueOrDefault();

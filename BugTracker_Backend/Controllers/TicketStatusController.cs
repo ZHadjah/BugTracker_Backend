@@ -11,6 +11,7 @@ using BugTracker_Backend.Models;
 namespace BugTracker_Backend.Controllers
 {
     [ApiController]
+    [Route("[controller]")]
     public class TicketStatusController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -21,6 +22,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: TicketStatus
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Index()
         {
               return _context.TicketStatuses != null ? 
@@ -29,6 +32,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: TicketStatus/Details/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.TicketStatuses == null)
@@ -47,6 +52,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: TicketStatus/Create
+        [HttpGet]
+        [Route("[action]")]
         public IActionResult Create()
         {
             return View();
@@ -57,6 +64,7 @@ namespace BugTracker_Backend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> Create([Bind("Id,Name")] TicketStatus ticketStatus)
         {
             if (ModelState.IsValid)
@@ -69,6 +77,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: TicketStatus/Edit/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.TicketStatuses == null)
@@ -89,6 +99,7 @@ namespace BugTracker_Backend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] TicketStatus ticketStatus)
         {
             if (id != ticketStatus.Id)
@@ -120,6 +131,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: TicketStatus/Delete/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.TicketStatuses == null)
@@ -140,6 +153,7 @@ namespace BugTracker_Backend.Controllers
         // POST: TicketStatus/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.TicketStatuses == null)
@@ -156,6 +170,8 @@ namespace BugTracker_Backend.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        [Route("[action]")]
         private bool TicketStatusExists(int id)
         {
           return (_context.TicketStatuses?.Any(e => e.Id == id)).GetValueOrDefault();

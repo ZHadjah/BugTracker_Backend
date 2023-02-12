@@ -16,6 +16,7 @@ using BugTracker_Backend.Models.Enums;
 namespace BugTracker_Backend.Controllers
 {
     [ApiController]
+    [Route("[controller]")]
     public class ProjectsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -36,6 +37,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: Projects
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Projects.Include(p => p.Company).Include(p => p.ProjectPriority);
@@ -43,6 +46,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: Projects/Details/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Projects == null)
@@ -63,6 +68,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: Projects/Create
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Create()
         {
             int companyId = User.Identity.GetCompanyId().Value;
@@ -91,6 +98,7 @@ namespace BugTracker_Backend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> Create( AddProjectWithPMViewModel model)
         {
             if(model != null)
@@ -125,6 +133,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: Projects/Edit/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Projects == null)
@@ -147,6 +157,7 @@ namespace BugTracker_Backend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,CompanyId,Name,Description,StartDate,EndDate,ProjectPriorityId,ImageFileName,ImageFileData,ImageContentType,Archived")] Project project)
         {
             if (id != project.Id)
@@ -180,6 +191,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: Projects/Delete/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Projects == null)
@@ -202,6 +215,7 @@ namespace BugTracker_Backend.Controllers
         // POST: Projects/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Projects == null)
@@ -218,6 +232,8 @@ namespace BugTracker_Backend.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        [Route("[action]")]
         private bool ProjectExists(int id)
         {
           return (_context.Projects?.Any(e => e.Id == id)).GetValueOrDefault();

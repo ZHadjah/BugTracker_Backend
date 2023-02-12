@@ -11,6 +11,7 @@ using BugTracker_Backend.Models;
 namespace BugTracker_Backend.Controllers
 {
     [ApiController]
+    [Route("[controller]")]
     public class TicketAttachmentsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -21,6 +22,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: TicketAttachments
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.TicketAttachments.Include(t => t.Ticket).Include(t => t.User);
@@ -28,6 +31,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: TicketAttachments/Details/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.TicketAttachments == null)
@@ -48,6 +53,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: TicketAttachments/Create
+        [HttpGet]
+        [Route("[action]")]
         public IActionResult Create()
         {
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Id");
@@ -60,6 +67,7 @@ namespace BugTracker_Backend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> Create([Bind("Id,TicketId,Created,UserId,Description,FileName,FileData,FileContentType")] TicketAttachment ticketAttachment)
         {
             if (ModelState.IsValid)
@@ -74,6 +82,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: TicketAttachments/Edit/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.TicketAttachments == null)
@@ -96,6 +106,7 @@ namespace BugTracker_Backend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,TicketId,Created,UserId,Description,FileName,FileData,FileContentType")] TicketAttachment ticketAttachment)
         {
             if (id != ticketAttachment.Id)
@@ -129,6 +140,8 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: TicketAttachments/Delete/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.TicketAttachments == null)
@@ -151,6 +164,7 @@ namespace BugTracker_Backend.Controllers
         // POST: TicketAttachments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.TicketAttachments == null)
@@ -167,6 +181,8 @@ namespace BugTracker_Backend.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        [Route("[action]")]
         private bool TicketAttachmentExists(int id)
         {
           return (_context.TicketAttachments?.Any(e => e.Id == id)).GetValueOrDefault();
