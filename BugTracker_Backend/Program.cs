@@ -74,7 +74,7 @@ else
 }
 
 app.UseHttpsRedirection();
-app.UseCors();
+//app.UseCors();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
