@@ -296,7 +296,6 @@ namespace BugTracker_Backend.Services
         {            
             try
             {
-
                 List<Ticket> tickets = role switch
                 {
                     "Admin" => tickets = await GetAllTicketsByCompanyAsync(companyId),

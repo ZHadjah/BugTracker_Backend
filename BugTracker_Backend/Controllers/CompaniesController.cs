@@ -21,13 +21,35 @@ namespace BugTracker_Backend.Controllers
             _context = context;
         }
 
+        // GET: Companies/NumberOfCompanies
         [HttpGet]
         [Route("[action]")]
+        public async Task<IActionResult> NumberOfCompanies()
+        {
+            var applicationDbContext = await _context.Companies.Select(s => s).ToListAsync();
+            int numberOfCompanies = applicationDbContext.Count();
+
+            return Ok(numberOfCompanies);
+        }
+
+        [HttpGet]
+        [Route("")]
         public async Task<IActionResult> Index()
         {
-              return _context.Companies != null ? 
-                          View(await _context.Companies.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Companies'  is null.");
+            if(_context.Companies != null)
+            {
+                //Response.Headers.Add("Access-Control-Expose-Headers", "Content-Range");
+                //Response.Headers.Add("Content-Range", "bytes : 0-9/*");
+                return Ok(await _context.Companies.Where(t => t.Id != null).ToListAsync());
+            }
+            else
+            {
+                return Problem("Entity set 'ApplicationDbContext.Companies'  is null.");
+            }
+
+            //return _context.Companies != null ? 
+            //              Ok(await _context.Companies.ToListAsync()) :
+            //              Problem("Entity set 'ApplicationDbContext.Companies'  is null.");
         }
 
         [HttpGet]

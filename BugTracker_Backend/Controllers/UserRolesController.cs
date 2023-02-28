@@ -1,9 +1,11 @@
-﻿using BugTracker_Backend.Extensions;
+﻿using BugTracker_Backend.Data;
+using BugTracker_Backend.Extensions;
 using BugTracker_Backend.Models;
 using BugTracker_Backend.Models.ViewModels;
 using BugTracker_Backend.Services;
 using BugTracker_Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BugTracker_Backend.Controllers
 {
@@ -13,16 +15,29 @@ namespace BugTracker_Backend.Controllers
     {
         private readonly IBTRolesService _rolesService;
         private readonly IBTCompanyInfoService _companyInfoService;
+        private readonly ApplicationDbContext _context;
 
 
-        public UserRolesController(IBTRolesService rolesService, IBTCompanyInfoService companyInfoService)
+        public UserRolesController(IBTRolesService rolesService, IBTCompanyInfoService companyInfoService, ApplicationDbContext context)
         {
             _rolesService = rolesService;
             _companyInfoService = companyInfoService;
+            _context = context;
+        }
+
+        // GET: UserRoles/NumberOfUsers
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> NumberOfUsers()
+        {
+            var applicationDbContext = await _context.Users.Select(s => s).ToListAsync();
+            int numberOfUsers = applicationDbContext.Count();
+
+            return Ok(numberOfUsers);
         }
 
         [HttpGet]
-        [Route("[action]")]
+        [Route("")]
         public async Task<IActionResult> ManageUserRoles()
         {
             List<ManageUserRolesViewModel> model= new();
@@ -41,7 +56,7 @@ namespace BugTracker_Backend.Controllers
                 model.Add(viewModel);
             }
 
-            return View(model);
+            return Ok(model);
         }
 
         [HttpPost]

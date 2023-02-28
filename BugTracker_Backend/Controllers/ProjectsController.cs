@@ -36,13 +36,24 @@ namespace BugTracker_Backend.Controllers
             _projectService = projectService;
         }
 
-        // GET: Projects
+        // GET: Projects/NumberOfProjects
         [HttpGet]
         [Route("[action]")]
+        public async Task<IActionResult> NumberOfProjects()
+        {
+            var applicationDbContext = await _context.Projects.Select(s => s).ToListAsync();
+            int numberOfProjects = applicationDbContext.Count();
+
+            return Ok(numberOfProjects);
+        }
+
+        // GET: Projects
+        [HttpGet]
+        [Route("")]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Projects.Include(p => p.Company).Include(p => p.ProjectPriority);
-            return View(await applicationDbContext.ToListAsync());
+            return Ok(await applicationDbContext.ToListAsync());
         }
 
         // GET: Projects/Details/5
@@ -104,6 +115,7 @@ namespace BugTracker_Backend.Controllers
             if(model != null)
             {
                 int companyId = User.Identity.GetCompanyId().Value;
+
                 try
                 {
                     if(model.Project.ImageFormFile != null)
