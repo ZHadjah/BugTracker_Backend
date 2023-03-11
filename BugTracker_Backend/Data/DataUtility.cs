@@ -12,10 +12,11 @@ using Microsoft.EntityFrameworkCore;
 using BugTracker_Backend.Models.Enums;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq.Expressions;
+using Serilog;
 
 namespace BugTracker_Backend.Data
 {
-        public static class DataUtility
+    public static class DataUtility
     {
         //Company Ids
         private static int company1Id;
@@ -23,7 +24,7 @@ namespace BugTracker_Backend.Data
         private static int company3Id;
         private static int company4Id;
         private static int company5Id;
-
+              
         public static string GetConnectionString(IConfiguration configuration)
         {
             //The default connection string will come from appSettings like usual
@@ -222,8 +223,6 @@ namespace BugTracker_Backend.Data
                 throw;
             }
         }
-
-
 
         public static async Task SeedDefaultUsersAsync(UserManager<BTUser> userManager)
         {
@@ -927,21 +926,19 @@ namespace BugTracker_Backend.Data
                                 new Ticket() {Title = "Movie Ticket 20", Description = "Ticket details for movie ticket 20", Created = DateTimeOffset.Now, ProjectId = movieId, Project = movieProject, TicketPriorityId = priorityUrgent, TicketStatusId = statusNew, TicketTypeId = typeNewDev},
                 };
 
-                int ticketStatusId = 0;
-
-
 
                 //initializes all ticket statuses based off the ticket status Id
+                int ticketStatusId = 0;
                 foreach (var ticket in tickets)
                 {
                     int ticketStatus = ticket.TicketStatusId;
 
                     var result = ticketStatus switch
                     {
-                        var x when x == statusNew => new TicketStatus() { Id = ticketStatusId, Name = BTTicketStatus.New.ToString() },
-                        var x when x == statusDev => new TicketStatus() { Id = ticketStatusId, Name = BTTicketStatus.Development.ToString() },
-                        var x when x == statusTest => new TicketStatus() { Id = ticketStatusId, Name = BTTicketStatus.Testing.ToString() },
-                        var x when x == statusResolved => new TicketStatus() { Id = ticketStatusId, Name = BTTicketStatus.Resolved.ToString() },
+                        var x when x == statusNew => new TicketStatus() { Name = BTTicketStatus.New.ToString() },
+                        var x when x == statusDev => new TicketStatus() {  Name = BTTicketStatus.Development.ToString() },
+                        var x when x == statusTest => new TicketStatus() { Name = BTTicketStatus.Testing.ToString() },
+                        var x when x == statusResolved => new TicketStatus() { Name = BTTicketStatus.Resolved.ToString() },
 
                         _ => null
                     };
@@ -949,6 +946,52 @@ namespace BugTracker_Backend.Data
                     ticket.TicketStatus = result;
                     ticketStatusId++;
                 }
+
+
+
+                //initializes all ticket priorities based off the ticket priority Id
+                int ticketPriorityId = 0;
+                foreach (var ticket in tickets)
+                {
+                    int ticketPriority = ticket.TicketPriorityId;
+
+                    var result = ticketPriority switch
+                    {
+                        var x when x == priorityUrgent => new TicketPriority() { Name = BTTicketPriority.Urgent.ToString() },
+                        var x when x == priorityHigh => new TicketPriority() { Name = BTTicketPriority.High.ToString() },
+                        var x when x == priorityMedium => new TicketPriority() { Name = BTTicketPriority.Medium.ToString() },
+                        var x when x == priorityLow => new TicketPriority() { Name = BTTicketPriority.Low.ToString() },
+
+                        _ => null
+                    };
+
+                    ticket.TicketPriority = result;
+                    ticketPriorityId++;
+                }
+
+
+
+                //initializes all ticket types based off the ticket type Id
+                int ticketTypeId = 0;
+                foreach (var ticket in tickets)
+                {
+                    int ticketType = ticket.TicketTypeId;
+
+                    var result = ticketType switch
+                    {
+                        var x when x == typeNewDev => new TicketType() { Name = BTTicketType.NewDevelopment.ToString() },
+                        var x when x == typeWorkTask => new TicketType() { Name = BTTicketType.WorkTask.ToString() },
+                        var x when x == typeDefect => new TicketType() { Name = BTTicketType.Defect.ToString() },
+                        var x when x == typeEnhancement => new TicketType() { Name = BTTicketType.Enhancement.ToString() },
+                        var x when x == typeChangeRequest => new TicketType() { Name = BTTicketType.ChangeRequest.ToString() },
+
+                        _ => null
+                    };
+
+                    ticket.TicketType = result;
+                    ticketTypeId++;
+                }
+
 
                 var dbTickets = context.Tickets.Select(c => c.Title).ToList();
 
@@ -958,6 +1001,7 @@ namespace BugTracker_Backend.Data
             
             catch (Exception ex)
             {
+
                 Console.WriteLine("*************  ERROR  *************");
                 Console.WriteLine("Error Seeding Tickets.");
                 Console.WriteLine(ex.Message);

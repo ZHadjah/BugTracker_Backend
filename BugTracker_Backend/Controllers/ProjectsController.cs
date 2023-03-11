@@ -37,15 +37,15 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: Projects/NumberOfProjects
-        [HttpGet]
-        [Route("[action]")]
-        public async Task<IActionResult> NumberOfProjects()
-        {
-            var applicationDbContext = await _context.Projects.Select(s => s).ToListAsync();
-            int numberOfProjects = applicationDbContext.Count();
+        //[HttpGet]
+        //[Route("[action]")]
+        //public async Task<IActionResult> NumberOfProjects()
+        //{
+        //    var applicationDbContext = await _context.Projects.Select(s => s).ToListAsync();
+        //    int numberOfProjects = applicationDbContext.Count();
 
-            return Ok(numberOfProjects);
-        }
+        //    return Ok(numberOfProjects);
+        //}
 
         // GET: Projects
         [HttpGet]
@@ -58,7 +58,7 @@ namespace BugTracker_Backend.Controllers
 
         // GET: Projects/Details/5
         [HttpGet]
-        [Route("[action]")]
+        [Route("[action]/{id}")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Projects == null)
@@ -93,14 +93,6 @@ namespace BugTracker_Backend.Controllers
                                           "Id", "FullName" );
 
             model.PriorityList = new SelectList(await _lookupService.GetProjectPrioritiesAsync(), "Id", "Name");
-
-            //
-
-            //
-
-            //
-
-
             return View(model);
         }
 

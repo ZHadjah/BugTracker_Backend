@@ -26,15 +26,15 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: UserRoles/NumberOfUsers
-        [HttpGet]
-        [Route("[action]")]
-        public async Task<IActionResult> NumberOfUsers()
-        {
-            var applicationDbContext = await _context.Users.Select(s => s).ToListAsync();
-            int numberOfUsers = applicationDbContext.Count();
+        //[HttpGet]
+        //[Route("[action]")]
+        //public async Task<IActionResult> NumberOfUsers()
+        //{
+        //    var applicationDbContext = await _context.Users.Select(s => s).ToListAsync();
+        //    int numberOfUsers = applicationDbContext.Count();
 
-            return Ok(numberOfUsers);
-        }
+        //    return Ok(numberOfUsers);
+        //}
 
         [HttpGet]
         [Route("")]

@@ -16,8 +16,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetSection("pgSettings")["pgConnection"];
 
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(DataUtility.GetConnectionString(builder.Configuration), 
-                                                    o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(DataUtility.GetConnectionString(builder.Configuration),
+                                                    options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
+
+
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 
@@ -41,9 +43,16 @@ builder.Services.AddScoped<IBTNotificationService, BTNotificationService>();
 builder.Services.AddScoped<IBTLookupService, BTLookupService>();
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddSwaggerGen();
+//builder.Services.AddLogging(loggingBuilder => {
+//    loggingBuilder.AddConsole()
+//        .AddFilter(DbLoggerCategory.Database.Equals(), LogLevel.Information);
+//    loggingBuilder.AddDebug();
+//});
 
-builder.Host.useser
 
+
+//builder.Host.UseSerilog((context, configuration) =>
+//    configuration.ReadFrom.Configuration(context.Configuration));
 //JWT AUTH
 //builder.Services.AddAuthentication(options =>
 //{
@@ -64,8 +73,6 @@ builder.Host.useser
 //        ValidateIssuerSigningKey = true
 //    };
 //});
-
-
 
 
 var provider = builder.Services.BuildServiceProvider();

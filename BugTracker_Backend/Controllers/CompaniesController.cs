@@ -22,15 +22,15 @@ namespace BugTracker_Backend.Controllers
         }
 
         // GET: Companies/NumberOfCompanies
-        [HttpGet]
-        [Route("[action]")]
-        public async Task<IActionResult> NumberOfCompanies()
-        {
-            var applicationDbContext = await _context.Companies.Select(s => s).ToListAsync();
-            int numberOfCompanies = applicationDbContext.Count();
+        //[HttpGet]
+        //[Route("[action]")]
+        //public async Task<IActionResult> NumberOfCompanies()
+        //{
+        //    var applicationDbContext = await _context.Companies.Select(s => s).ToListAsync();
+        //    int numberOfCompanies = applicationDbContext.Count();
 
-            return Ok(numberOfCompanies);
-        }
+        //    return Ok(numberOfCompanies);
+        //}
 
         [HttpGet]
         [Route("")]
