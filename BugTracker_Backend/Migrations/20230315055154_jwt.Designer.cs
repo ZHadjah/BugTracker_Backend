@@ -12,15 +12,15 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BugTrackerBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230202235529_fixed_notif")]
-    partial class fixednotif
+    [Migration("20230315055154_jwt")]
+    partial class jwt
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("ProductVersion", "7.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -49,15 +49,12 @@ namespace BugTrackerBackend.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("AvatarContentType")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<byte[]>("AvatarFileData")
-                        .IsRequired()
                         .HasColumnType("bytea");
 
                     b.Property<string>("AvatarFileName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int?>("CompanyId")
@@ -259,7 +256,7 @@ namespace BugTrackerBackend.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Archived")
+                    b.Property<bool?>("Archived")
                         .HasColumnType("boolean");
 
                     b.Property<int>("CompanyId")
@@ -269,19 +266,16 @@ namespace BugTrackerBackend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset>("EndDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ImageContentType")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<byte[]>("ImageFileData")
-                        .IsRequired()
                         .HasColumnType("bytea");
 
                     b.Property<string>("ImageFileName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
@@ -291,8 +285,8 @@ namespace BugTrackerBackend.Migrations
                     b.Property<int?>("ProjectPriorityId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTimeOffset>("StartDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -339,11 +333,9 @@ namespace BugTrackerBackend.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("DeveloperUserId")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("OwnerUserId")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("ProjectId")
@@ -793,15 +785,11 @@ namespace BugTrackerBackend.Migrations
                 {
                     b.HasOne("BugTracker_Backend.Models.BTUser", "DeveloperUser")
                         .WithMany()
-                        .HasForeignKey("DeveloperUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DeveloperUserId");
 
                     b.HasOne("BugTracker_Backend.Models.BTUser", "OwnerUser")
                         .WithMany()
-                        .HasForeignKey("OwnerUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OwnerUserId");
 
                     b.HasOne("BugTracker_Backend.Models.Project", "Project")
                         .WithMany("Tickets")

@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BugTracker_Backend.Data;
 using BugTracker_Backend.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BugTracker_Backend.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public class CompaniesController : Controller
     {

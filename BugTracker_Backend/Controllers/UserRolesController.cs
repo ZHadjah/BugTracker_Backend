@@ -4,12 +4,14 @@ using BugTracker_Backend.Models;
 using BugTracker_Backend.Models.ViewModels;
 using BugTracker_Backend.Services;
 using BugTracker_Backend.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BugTracker_Backend.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public class UserRolesController : Controller
     {
@@ -17,24 +19,13 @@ namespace BugTracker_Backend.Controllers
         private readonly IBTCompanyInfoService _companyInfoService;
         private readonly ApplicationDbContext _context;
 
-
         public UserRolesController(IBTRolesService rolesService, IBTCompanyInfoService companyInfoService, ApplicationDbContext context)
         {
             _rolesService = rolesService;
             _companyInfoService = companyInfoService;
             _context = context;
         }
-
-        // GET: UserRoles/NumberOfUsers
-        //[HttpGet]
-        //[Route("[action]")]
-        //public async Task<IActionResult> NumberOfUsers()
-        //{
-        //    var applicationDbContext = await _context.Users.Select(s => s).ToListAsync();
-        //    int numberOfUsers = applicationDbContext.Count();
-
-        //    return Ok(numberOfUsers);
-        //}
+               
 
         [HttpGet]
         [Route("")]

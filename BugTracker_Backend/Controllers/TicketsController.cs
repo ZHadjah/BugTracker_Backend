@@ -11,10 +11,12 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using Azure;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BugTracker_Backend.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public class TicketsController : Controller
     {

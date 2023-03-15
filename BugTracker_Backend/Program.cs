@@ -11,6 +11,8 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using BugTracker_Backend.Configurations;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +33,7 @@ builder.Services.AddControllersWithViews().AddJsonOptions(o => o.JsonSerializerO
 
 //A new instance is provided everytime a request is made, however
 //an instance is reused when inside the same exact scope
+builder.Services.AddScoped<IBTDashboardInfoService, BTDashboardInfoService>();
 builder.Services.AddScoped<IBTRolesService, BTRolesService>();
 builder.Services.AddScoped<IBTCompanyInfoService, BTCompanyInfoService>();
 builder.Services.AddScoped<IBTProjectService, BTProjectService>();
@@ -43,37 +46,37 @@ builder.Services.AddScoped<IBTNotificationService, BTNotificationService>();
 builder.Services.AddScoped<IBTLookupService, BTLookupService>();
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddSwaggerGen();
-//builder.Services.AddLogging(loggingBuilder => {
-//    loggingBuilder.AddConsole()
-//        .AddFilter(DbLoggerCategory.Database.Equals(), LogLevel.Information);
-//    loggingBuilder.AddDebug();
-//});
 
-
-
-//builder.Host.UseSerilog((context, configuration) =>
-//    configuration.ReadFrom.Configuration(context.Configuration));
 //JWT AUTH
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-//}).AddJwtBearer(o =>
-//{
-//    o.TokenValidationParameters = new TokenValidationParameters
-//    {
-//        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-//        ValidAudience = builder.Configuration["Jwt:Audience"],
-//        IssuerSigningKey = new SymmetricSecurityKey
-//        (Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-//        ValidateIssuer = true,
-//        ValidateAudience = true,
-//        ValidateLifetime = false,
-//        ValidateIssuerSigningKey = true
-//    };
-//});
+//builder.Services.AddDefaultIdentity<BTUser>(options => options.SignIn.RequireConfirmedEmail = false)
+//    .AddEntityFrameworkStores<ApplicationDbContext>();
 
+
+builder.Services.AddScoped<IBTAuthenticationService, BTAuthenticationService>();
+var authSecretConnectionString = builder.Configuration.GetSection("JwtConfig");
+builder.Services.Configure<JwtConfig>(authSecretConnectionString);
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(jwt =>
+{
+    var key = Encoding.ASCII.GetBytes( builder.Configuration.GetSection("JwtConfig:Secret").Value );
+
+    jwt.SaveToken = true;
+    jwt.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        RequireExpirationTime = false,
+        ValidateLifetime = true,
+    };
+});
+//JWT AUTH
 
 var provider = builder.Services.BuildServiceProvider();
 var configuration = provider.GetService<IConfiguration>();
@@ -111,9 +114,7 @@ else
 app.UseHttpsRedirection();
 app.UseCors();
 app.UseStaticFiles();
-//app.UseAuthentication();
-//app.UseAuthorization();
-
+ 
 //app.MapControllerRoute(
 //    name: "default",
 //    pattern: "{controller=Home}/{action=Index}/{id?}");

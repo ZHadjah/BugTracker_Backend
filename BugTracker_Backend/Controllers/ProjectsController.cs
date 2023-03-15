@@ -12,10 +12,12 @@ using BugTracker_Backend.Models.ViewModels;
 using BugTracker_Backend.Services;
 using BugTracker_Backend.Services.Interfaces;
 using BugTracker_Backend.Models.Enums;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BugTracker_Backend.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public class ProjectsController : Controller
     {

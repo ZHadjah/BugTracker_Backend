@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BugTrackerBackend.Migrations
 {
     /// <inheritdoc />
-    public partial class fixednotif : Migration
+    public partial class test : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -118,18 +118,20 @@ namespace BugTrackerBackend.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
+                    Username = table.Column<string>(type: "text", nullable: false),
+                    PasswordHash = table.Column<byte[]>(type: "bytea", nullable: false),
+                    PasswordSalt = table.Column<byte[]>(type: "bytea", nullable: false),
                     FirstName = table.Column<string>(type: "text", nullable: true),
                     LastName = table.Column<string>(type: "text", nullable: true),
-                    AvatarFileName = table.Column<string>(type: "text", nullable: false),
-                    AvatarFileData = table.Column<byte[]>(type: "bytea", nullable: false),
-                    AvatarContentType = table.Column<string>(type: "text", nullable: false),
+                    AvatarFileName = table.Column<string>(type: "text", nullable: true),
+                    AvatarFileData = table.Column<byte[]>(type: "bytea", nullable: true),
+                    AvatarContentType = table.Column<string>(type: "text", nullable: true),
                     CompanyId = table.Column<int>(type: "integer", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    PasswordHash = table.Column<string>(type: "text", nullable: true),
                     SecurityStamp = table.Column<string>(type: "text", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
                     PhoneNumber = table.Column<string>(type: "text", nullable: true),
@@ -158,13 +160,13 @@ namespace BugTrackerBackend.Migrations
                     CompanyId = table.Column<int>(type: "integer", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
-                    StartDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    EndDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     ProjectPriorityId = table.Column<int>(type: "integer", nullable: true),
-                    ImageFileName = table.Column<string>(type: "text", nullable: false),
-                    ImageFileData = table.Column<byte[]>(type: "bytea", nullable: false),
-                    ImageContentType = table.Column<string>(type: "text", nullable: false),
-                    Archived = table.Column<bool>(type: "boolean", nullable: false)
+                    ImageFileName = table.Column<string>(type: "text", nullable: true),
+                    ImageFileData = table.Column<byte[]>(type: "bytea", nullable: true),
+                    ImageContentType = table.Column<string>(type: "text", nullable: true),
+                    Archived = table.Column<bool>(type: "boolean", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -207,8 +209,8 @@ namespace BugTrackerBackend.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "text", nullable: false),
+                    ProviderKey = table.Column<string>(type: "text", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "text", nullable: true),
                     UserId = table.Column<string>(type: "text", nullable: false)
                 },
@@ -252,8 +254,8 @@ namespace BugTrackerBackend.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "text", nullable: false),
-                    LoginProvider = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
                     Value = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -353,8 +355,8 @@ namespace BugTrackerBackend.Migrations
                     TicketPriorityId = table.Column<int>(type: "integer", nullable: false),
                     TicketStatusId = table.Column<int>(type: "integer", nullable: false),
                     TicketTypeId = table.Column<int>(type: "integer", nullable: false),
-                    OwnerUserId = table.Column<string>(type: "text", nullable: false),
-                    DeveloperUserId = table.Column<string>(type: "text", nullable: false)
+                    OwnerUserId = table.Column<string>(type: "text", nullable: true),
+                    DeveloperUserId = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -363,14 +365,12 @@ namespace BugTrackerBackend.Migrations
                         name: "FK_Tickets_AspNetUsers_DeveloperUserId",
                         column: x => x.DeveloperUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Tickets_AspNetUsers_OwnerUserId",
                         column: x => x.OwnerUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Tickets_Projects_ProjectId",
                         column: x => x.ProjectId,
