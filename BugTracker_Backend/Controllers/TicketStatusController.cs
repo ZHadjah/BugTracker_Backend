@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BugTracker_Backend.Data;
 using BugTracker_Backend.Models;
+using Newtonsoft.Json;
 
 namespace BugTracker_Backend.Controllers
 {
@@ -23,13 +24,18 @@ namespace BugTracker_Backend.Controllers
 
         // GET: TicketStatus
         [HttpGet]
-        [Route("[action]")]
+        [Route("")]
         public async Task<IActionResult> Index()
         {
-              return _context.TicketStatuses != null ? 
-                          View(await _context.TicketStatuses.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.TicketStatuses'  is null.");
+            //return _context.TicketStatuses != null ? 
+            //            OK(await _context.TicketStatuses.ToListAsync()) :
+            //            Problem("Entity set 'ApplicationDbContext.TicketStatuses'  is null.");
+
+            return Ok(await _context.TicketStatuses.ToListAsync());
+
         }
+
+    
 
         // GET: TicketStatus/Details/5
         [HttpGet]

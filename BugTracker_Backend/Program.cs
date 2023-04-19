@@ -26,9 +26,9 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddIdentity<BTUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddClaimsPrincipalFactory<BTUserClaimsPrincipleFactory>();
+//builder.Services.AddIdentity<BTUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+//                .AddEntityFrameworkStores<ApplicationDbContext>()
+//                .AddClaimsPrincipalFactory<BTUserClaimsPrincipleFactory>();
 builder.Services.AddControllersWithViews().AddJsonOptions(o => o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
 //A new instance is provided everytime a request is made, however
@@ -48,8 +48,10 @@ builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailS
 builder.Services.AddSwaggerGen();
 
 //JWT AUTH
-//builder.Services.AddDefaultIdentity<BTUser>(options => options.SignIn.RequireConfirmedEmail = false)
-//    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<BTUser, IdentityRole>(options => options.SignIn.RequireConfirmedEmail = false)
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddClaimsPrincipalFactory<BTUserClaimsPrincipleFactory>();
 
 
 builder.Services.AddScoped<IBTAuthenticationService, BTAuthenticationService>();
@@ -63,7 +65,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(jwt =>
 {
-    var key = Encoding.ASCII.GetBytes( builder.Configuration.GetSection("JwtConfig:Secret").Value );
+    var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("JwtConfig:Secret").Value);
 
     jwt.SaveToken = true;
     jwt.TokenValidationParameters = new TokenValidationParameters()
@@ -107,7 +109,6 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

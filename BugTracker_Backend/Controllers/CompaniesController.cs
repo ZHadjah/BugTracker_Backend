@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Authorization;
 namespace BugTracker_Backend.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route("[controller]")]
     public class CompaniesController : Controller
     {

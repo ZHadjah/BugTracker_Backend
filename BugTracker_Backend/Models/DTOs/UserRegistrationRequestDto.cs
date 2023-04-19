@@ -6,7 +6,7 @@ namespace BugTracker_Backend.Models.DTOs
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string UserName { get; set; }
+        public int CompanyId { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
     }
@@ -15,8 +15,6 @@ namespace BugTracker_Backend.Models.DTOs
     {
         public UserRegistrationRequestDtoValidator()
         {
-            RuleFor(x => x.UserName).NotNull();
-            RuleFor(x => x.UserName).Length(5, 50);
 
             RuleFor(x => x.Email).NotNull();
             RuleFor(x => x.Email).Length(5, 50);

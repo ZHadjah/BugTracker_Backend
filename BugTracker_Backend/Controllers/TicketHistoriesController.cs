@@ -12,7 +12,6 @@ namespace BugTracker_Backend.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-
     public class TicketHistoriesController : Controller
     {
         private readonly ApplicationDbContext _context;

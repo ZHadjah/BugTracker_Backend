@@ -71,7 +71,8 @@ namespace BugTracker_Backend.Controllers
                 return Ok(new AuthResult()
                 {
                     Token= jwtToken,
-                    Result = true
+                    Result = true,
+                    User = user
                 });
             }
            
@@ -88,7 +89,7 @@ namespace BugTracker_Backend.Controllers
 
 
 
-            [HttpPost]
+        [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> Register([FromBody] UserRegistrationRequestDto requestDto)
         {
@@ -113,10 +114,11 @@ namespace BugTracker_Backend.Controllers
                 //create user
                 var newUser = new BTUser
                 {
-                    UserName = requestDto.UserName,
                     Email = requestDto.Email,
                     FirstName = requestDto.FirstName,
                     LastName = requestDto.LastName,
+                    CompanyId = requestDto.CompanyId,
+                    UserName = requestDto.Email,
                     EmailConfirmed = true
                 };
 
@@ -130,7 +132,8 @@ namespace BugTracker_Backend.Controllers
                     return Ok(new AuthResult()
                     {
                         Result = true,
-                        Token = token
+                        Token = token,
+                        User = newUser, 
                     });
                 }
 

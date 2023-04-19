@@ -11,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 namespace BugTracker_Backend.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route("[controller]")]
     public class UserRolesController : Controller
     {

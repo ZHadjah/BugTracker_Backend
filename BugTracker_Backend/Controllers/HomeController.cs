@@ -36,19 +36,19 @@ namespace BugTracker_Backend.Controllers
             return Ok(dashboardInfo);
         }     
 
-        [HttpGet]
-        [Route("[action]")]
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        //[HttpGet]
+        //[Route("[action]")]
+        //public IActionResult Privacy()
+        //{
+        //    return View();
+        //}
 
-        [HttpGet]
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        [Route("[action]")]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        //[HttpGet]
+        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        //[Route("[action]")]
+        //public IActionResult Error()
+        //{
+        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        //}
     }
 }
