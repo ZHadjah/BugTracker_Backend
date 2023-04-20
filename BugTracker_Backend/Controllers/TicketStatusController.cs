@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using BugTracker_Backend.Data;
 using BugTracker_Backend.Models;
 using Newtonsoft.Json;
+using BugTracker_Backend.Services;
+using BugTracker_Backend.Services.Interfaces;
 
 namespace BugTracker_Backend.Controllers
 {
@@ -16,10 +18,13 @@ namespace BugTracker_Backend.Controllers
     public class TicketStatusController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IBTDropDownOptionsService _dropDownOptionsService;
 
-        public TicketStatusController(ApplicationDbContext context)
+        public TicketStatusController(ApplicationDbContext context,
+                                        IBTDropDownOptionsService dropDownOptionsService)
         {
             _context = context;
+            _dropDownOptionsService = dropDownOptionsService;
         }
 
         // GET: TicketStatus
@@ -35,7 +40,17 @@ namespace BugTracker_Backend.Controllers
 
         }
 
-    
+        // GET: TicketStatus/Options
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> Options()
+        {
+            var dropDownInfo = _dropDownOptionsService.GetAllTicketStatusesAsync();
+
+            return Ok(dropDownInfo);
+
+        }
+
 
         // GET: TicketStatus/Details/5
         [HttpGet]

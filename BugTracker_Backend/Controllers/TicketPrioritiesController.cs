@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BugTracker_Backend.Data;
 using BugTracker_Backend.Models;
+using BugTracker_Backend.Services.Interfaces;
 
 namespace BugTracker_Backend.Controllers
 {
@@ -15,10 +16,13 @@ namespace BugTracker_Backend.Controllers
     public class TicketPrioritiesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IBTDropDownOptionsService _dropDownOptionsService;
 
-        public TicketPrioritiesController(ApplicationDbContext context)
+        public TicketPrioritiesController(ApplicationDbContext context,
+                                          IBTDropDownOptionsService dropDownOptionsService)
         {
             _context = context;
+            _dropDownOptionsService = dropDownOptionsService;
         }
 
         // GET: TicketPriorities
@@ -175,6 +179,17 @@ namespace BugTracker_Backend.Controllers
         private bool TicketPriorityExists(int id)
         {
           return (_context.TicketPriorities?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        // GET: TicketPriorities/Options
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> Options()
+        {
+            var dropDownInfo = _dropDownOptionsService.GetAllTicketPrioritiesAsync();
+
+            return Ok(dropDownInfo);
+
         }
     }
 }
