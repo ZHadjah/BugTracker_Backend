@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using NuGet.Configuration;
 using System.ComponentModel.Design;
+using System.Security.Claims;
 
 namespace BugTracker_Backend.Controllers
 {
@@ -37,10 +38,17 @@ namespace BugTracker_Backend.Controllers
         [Route("[action]")]
         public async Task<IActionResult> GetAllUsersInCompany()
         {
-            var test = User.Identity;
+            //ClaimsPrincipal currentUser = this.User;
+            //var userId = _userManager.GetUserId(currentUser);
+
+            //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // will give the user's userId
+            var name = User.Identity.Name;
+
+            BTUser user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == name);
+            int companyId = user.CompanyId.Value; 
 
             //get company ID of the logged in user
-            int companyId = User.Identity.GetCompanyId().Value;
+            //int companyId = User.Identity.GetCompanyId().Value;
             //int companyId = 1;
 
             List <BTUser> usersInCompany = await _companyInfoService.GetAllMembersAsync(companyId);
