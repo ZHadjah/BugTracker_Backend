@@ -1,14 +1,15 @@
 ﻿using BugTracker_Backend.Models;
+using BugTracker_Backend.Models.Enums;
 
 namespace BugTracker_Backend.Services.Interfaces
 {
     public interface IBTDropDownOptionsService
     {
-        public List<string> GetAllTicketStatusesAsync();
+        public string GetAllTicketStatusesAsync();
 
-        public List<string> GetAllTicketTypesAsync();
+        public string GetAllTicketTypesAsync();
 
-        public List<string> GetAllTicketPrioritiesAsync();
+        public  string GetAllTicketPrioritiesAsync();
 
 
     }

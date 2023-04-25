@@ -1,5 +1,6 @@
 ﻿using BugTracker_Backend.Configurations;
 using BugTracker_Backend.Data;
+using BugTracker_Backend.Extensions;
 using BugTracker_Backend.Models;
 using BugTracker_Backend.Models.DTOs;
 using BugTracker_Backend.Services.Interfaces;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -72,7 +74,8 @@ namespace BugTracker_Backend.Controllers
                 {
                     Token= jwtToken,
                     Result = true,
-                    User = user
+                    User = user,
+
                 });
             }
            
@@ -86,6 +89,22 @@ namespace BugTracker_Backend.Controllers
                     Result = false
                 });
         }
+
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> LoginTest()
+        {
+            string stringResult = User.Identity.IsAuthenticated.ToString();
+            string name = User.Identity.Name;
+
+            List<string> loginInfo = new List<string>() { stringResult, name };
+
+            return Ok(loginInfo);
+        }
+
+    
+
 
 
 

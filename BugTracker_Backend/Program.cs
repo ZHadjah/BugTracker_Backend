@@ -13,6 +13,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using BugTracker_Backend.Configurations;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,14 +46,35 @@ builder.Services.AddScoped<IBTInviteService, BTInviteService>();
 builder.Services.AddScoped<IBTFileService, BTFileService>();
 builder.Services.AddScoped<IBTNotificationService, BTNotificationService>();
 builder.Services.AddScoped<IBTLookupService, BTLookupService>();
-builder.Services.AddScoped<IBTDropDownOptionsService, BTDropDownOptionsService>();
+builder.Services.AddTransient<IBTDropDownOptionsService, BTDropDownOptionsService>();
 
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen( c => 
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "dotnetClaimAuthorization", Version = "v1" });
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme{
+        In=ParameterLocation.Header,
+        Description="Please insert token",
+        Name="Authorization",
+        Type=SecuritySchemeType.Http,
+        BearerFormat="JWT",
+        Scheme = "bearer"
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement{
+        {
+            new OpenApiSecurityScheme{
+                Reference = new OpenApiReference{
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+        new string[]{ }
+        }
+    });
+});
 
 //JWT AUTH
 builder.Services.AddIdentity<BTUser, IdentityRole>(options => options.SignIn.RequireConfirmedEmail = false)
-    .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddClaimsPrincipalFactory<BTUserClaimsPrincipleFactory>();
 
@@ -122,6 +145,7 @@ app.UseStaticFiles();
 //    name: "default",
 //    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.UseRouting();
+app.UseAuthorization();
 app.UseEndpoints(builder => builder.MapControllers());
 
 app.Run();

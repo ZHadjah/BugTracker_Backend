@@ -17,12 +17,10 @@ namespace BugTracker_Backend.Services
         private readonly UserManager<BTUser> _userManager;
         private readonly IConfiguration _configuration;
 
-
         public BTAuthenticationService(UserManager<BTUser> userManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _configuration = configuration;
-
         }
 
         public string GenerateJwtToken(BTUser user)

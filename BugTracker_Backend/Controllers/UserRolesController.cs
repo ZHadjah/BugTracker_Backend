@@ -5,26 +5,52 @@ using BugTracker_Backend.Models.ViewModels;
 using BugTracker_Backend.Services;
 using BugTracker_Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using NuGet.Configuration;
+using System.ComponentModel.Design;
 
 namespace BugTracker_Backend.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class UserRolesController : Controller
     {
         private readonly IBTRolesService _rolesService;
         private readonly IBTCompanyInfoService _companyInfoService;
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<BTUser> _userManager;
 
-        public UserRolesController(IBTRolesService rolesService, IBTCompanyInfoService companyInfoService, ApplicationDbContext context)
+        public UserRolesController(IBTRolesService rolesService,
+                                   IBTCompanyInfoService companyInfoService,
+                                   ApplicationDbContext context)
         {
             _rolesService = rolesService;
             _companyInfoService = companyInfoService;
             _context = context;
         }
-               
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAllUsersInCompany()
+        {
+            var test = User.Identity;
+
+            //get company ID of the logged in user
+            int companyId = User.Identity.GetCompanyId().Value;
+            //int companyId = 1;
+
+            List <BTUser> usersInCompany = await _companyInfoService.GetAllMembersAsync(companyId);
+
+            string jsonResult = JsonConvert.SerializeObject(usersInCompany, Formatting.Indented);
+
+            return Ok(jsonResult);
+
+        }
+
 
         [HttpGet]
         [Route("")]
@@ -34,9 +60,9 @@ namespace BugTracker_Backend.Controllers
 
             int companyId = User.Identity.GetCompanyId().Value;
 
-            List<BTUser> users = await _companyInfoService.GetAllMembersAsync(companyId);
+            List<BTUser> usersInCompany = await _companyInfoService.GetAllMembersAsync(companyId);
 
-            foreach (BTUser user in users)
+            foreach (BTUser user in usersInCompany)
             {
                 ManageUserRolesViewModel viewModel = new();
                 viewModel.BTUser = user;
