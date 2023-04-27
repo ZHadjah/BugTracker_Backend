@@ -36,12 +36,17 @@ namespace BugTracker_Backend.Controllers
 
         [HttpGet]
         [Route("[action]")]
+        [Authorize]
         public async Task<IActionResult> GetAllUsersInCompany()
         {
             //ClaimsPrincipal currentUser = this.User;
             //var userId = _userManager.GetUserId(currentUser);
 
             //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // will give the user's userId
+
+            var identity = HttpContext.User.Identity;
+
+
             var name = User.Identity.Name;
 
             BTUser user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == name);

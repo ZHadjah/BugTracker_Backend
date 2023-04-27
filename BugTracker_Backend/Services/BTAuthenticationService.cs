@@ -17,10 +17,12 @@ namespace BugTracker_Backend.Services
         private readonly UserManager<BTUser> _userManager;
         private readonly IConfiguration _configuration;
 
+
         public BTAuthenticationService(UserManager<BTUser> userManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _configuration = configuration;
+
         }
 
         public string GenerateJwtToken(BTUser user)
@@ -39,6 +41,7 @@ namespace BugTracker_Backend.Services
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToUniversalTime().ToString()),
+                    new Claim("CompanyId", user.CompanyId.ToString())
                 }),
 
                 Expires = DateTime.Now.AddHours(5),
