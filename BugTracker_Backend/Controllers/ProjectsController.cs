@@ -53,8 +53,8 @@ namespace BugTracker_Backend.Controllers
         [Route("")]
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Projects.Include(p => p.Company).Include(p => p.ProjectPriority);
-            return Ok(await applicationDbContext.ToListAsync());
+            var projects = await _context.Projects.ToListAsync();
+            return Ok(projects);
         }
 
         // GET: Projects/Details/5

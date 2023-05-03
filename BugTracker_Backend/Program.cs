@@ -15,6 +15,7 @@ using BugTracker_Backend.Configurations;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Microsoft.OpenApi.Models;
+using BugTracker_Backend.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,8 +81,9 @@ builder.Services.AddIdentity<BTUser, IdentityRole>(options => options.SignIn.Req
 
 
 builder.Services.AddScoped<IBTAuthenticationService, BTAuthenticationService>();
-var authSecretConnectionString = builder.Configuration.GetSection("JwtConfig");
-builder.Services.Configure<JwtConfig>(authSecretConnectionString);
+//var authSecretConnectionString = builder.Configuration.GetSection("JwtConfig");
+//builder.Services.Configure<JwtConfig>(authSecretConnectionString);
+builder.Services.AddSingleton(builder.Configuration.GetSection(nameof(JwtConfig)).Get<JwtConfig>());
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -145,6 +147,7 @@ app.UseStaticFiles();
 //    name: "default",
 //    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.UseRouting();
+app.UseMiddleware<JwtMiddleware>();
 app.UseAuthorization();
 app.UseEndpoints(builder => builder.MapControllers());
 

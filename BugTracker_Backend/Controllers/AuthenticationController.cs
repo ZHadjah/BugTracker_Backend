@@ -70,12 +70,12 @@ namespace BugTracker_Backend.Controllers
                        
                 var jwtToken = _authenticationService.GenerateJwtToken(user);
 
+
                 return Ok(new AuthResult()
                 {
                     Token= jwtToken,
                     Result = true,
                     User = user,
-
                 });
             }
            

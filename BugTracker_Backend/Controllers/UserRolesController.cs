@@ -39,29 +39,20 @@ namespace BugTracker_Backend.Controllers
         [Authorize]
         public async Task<IActionResult> GetAllUsersInCompany()
         {
-            //ClaimsPrincipal currentUser = this.User;
-            //var userId = _userManager.GetUserId(currentUser);
+            var test1 = HttpContext.User.Identity;
 
-            //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // will give the user's userId
+            var test2 = User.Identity.Name;
 
-            var identity = HttpContext.User.Identity;
+            var email = User.FindFirstValue(ClaimTypes.Email);
 
-
-            var name = User.Identity.Name;
-
-            BTUser user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == name);
+            BTUser user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
             int companyId = user.CompanyId.Value; 
-
-            //get company ID of the logged in user
-            //int companyId = User.Identity.GetCompanyId().Value;
-            //int companyId = 1;
 
             List <BTUser> usersInCompany = await _companyInfoService.GetAllMembersAsync(companyId);
 
             string jsonResult = JsonConvert.SerializeObject(usersInCompany, Formatting.Indented);
 
             return Ok(jsonResult);
-
         }
 
 
