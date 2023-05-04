@@ -37,17 +37,6 @@ namespace BugTracker_Backend.Controllers
             _projectService = projectService;
         }
 
-        // GET: Projects/NumberOfProjects
-        //[HttpGet]
-        //[Route("[action]")]
-        //public async Task<IActionResult> NumberOfProjects()
-        //{
-        //    var applicationDbContext = await _context.Projects.Select(s => s).ToListAsync();
-        //    int numberOfProjects = applicationDbContext.Count();
-
-        //    return Ok(numberOfProjects);
-        //}
-
         // GET: Projects
         [HttpGet]
         [Route("")]

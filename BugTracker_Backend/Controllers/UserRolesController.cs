@@ -36,13 +36,8 @@ namespace BugTracker_Backend.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        [Authorize]
         public async Task<IActionResult> GetAllUsersInCompany()
         {
-            var test1 = HttpContext.User.Identity;
-
-            var test2 = User.Identity.Name;
-
             var email = User.FindFirstValue(ClaimTypes.Email);
 
             BTUser user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
@@ -57,7 +52,7 @@ namespace BugTracker_Backend.Controllers
 
 
         [HttpGet]
-        [Route("")]
+        [Route("[action]")]
         public async Task<IActionResult> ManageUserRoles()
         {
             List<ManageUserRolesViewModel> model= new();
