@@ -24,6 +24,7 @@ namespace BugTracker_Backend.Controllers
         private readonly IBTAuthenticationService _authenticationService;
         private readonly IConfiguration _configuration;
 
+        //overloaded ctor
         public AuthenticationController(UserManager<BTUser> userManager,
                                         IBTAuthenticationService authenticationService,
                                         IConfiguration configuration)
@@ -102,9 +103,7 @@ namespace BugTracker_Backend.Controllers
 
             return Ok(loginInfo);
         }
-
     
-
 
 
 

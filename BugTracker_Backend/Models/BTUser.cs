@@ -7,6 +7,7 @@ using System.Text.Json.Serialization;
 
 namespace BugTracker_Backend.Models
 {
+    //inherit from the IdentityUser to extends IdentityUser's functionality
     public class BTUser : IdentityUser
     {       
         [Display(Name = "First Name")]

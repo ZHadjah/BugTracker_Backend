@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using NuGet.Configuration;
 using System.ComponentModel.Design;
@@ -27,11 +28,13 @@ namespace BugTracker_Backend.Controllers
 
         public UserRolesController(IBTRolesService rolesService,
                                    IBTCompanyInfoService companyInfoService,
-                                   ApplicationDbContext context)
+                                   ApplicationDbContext context,
+                                   UserManager<BTUser> userManager)
         {
             _rolesService = rolesService;
             _companyInfoService = companyInfoService;
             _context = context;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -55,7 +58,7 @@ namespace BugTracker_Backend.Controllers
         [Route("[action]")]
         public async Task<IActionResult> ManageUserRoles()
         {
-            List<ManageUserRolesViewModel> model= new();
+            List<ManageUserRolesViewModel> model = new List<ManageUserRolesViewModel>();
 
             int companyId = User.Identity.GetCompanyId().Value;
 
@@ -63,46 +66,53 @@ namespace BugTracker_Backend.Controllers
 
             foreach (BTUser user in usersInCompany)
             {
-                ManageUserRolesViewModel viewModel = new();
+                ManageUserRolesViewModel viewModel = new ManageUserRolesViewModel();
                 viewModel.BTUser = user;
-                IEnumerable<string> selected = await _rolesService.GetUserRolesAsync(user);
-                viewModel.Roles = new Microsoft.AspNetCore.Mvc.Rendering.MultiSelectList(await _rolesService.GetRolesAsync(), "Name", "Name", selected);
-                
+                //IEnumerable<string> selected = await _rolesService.GetUserRolesAsync(user);
+
+                // Find the role of the current user and put it into the variable assignedRole
+                var roles = await _userManager.GetRolesAsync(user);
+                string assignedRole = roles.FirstOrDefault();
+
+                viewModel.usersRole = assignedRole ?? "N/A";
+
+                //viewModel.Roles = new Microsoft.AspNetCore.Mvc.Rendering.MultiSelectList(await _rolesService.GetRolesAsync(), "Name", "Name", selected);
+
                 model.Add(viewModel);
             }
 
             return Ok(model);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("[action]")]
-        public async Task<IActionResult> ManageUserRoles(ManageUserRolesViewModel member)
-        {
-            //gget company id
-            int companyId = User.Identity.GetCompanyId().Value;
+    //    [HttpPost]
+    //    [ValidateAntiForgeryToken]
+    //    [Route("[action]")]
+    //    public async Task<IActionResult> ManageUserRoles(ManageUserRolesViewModel member)
+    //    {
+    //    //    //gget company id
+    //    //    int companyId = User.Identity.GetCompanyId().Value;
 
-            //instantiate BTUser
-            BTUser btUser = (await _companyInfoService.GetAllMembersAsync(companyId)).FirstOrDefault(u => u.Id == member.BTUser.Id);
+    //    //    //instantiate BTUser
+    //    //    BTUser btUser = (await _companyInfoService.GetAllMembersAsync(companyId)).FirstOrDefault(u => u.Id == member.BTUser.Id);
 
-            //Get roles for user
-            IEnumerable<string> roles = await _rolesService.GetUserRolesAsync(btUser);
+    //    //    //Get roles for user
+    //    //    IEnumerable<string> roles = await _rolesService.GetUserRolesAsync(btUser);
 
-            //Grab selected role
-            string userRole = member.selectedRoles.FirstOrDefault();
+    //    //    //Grab selected role
+    //    //    //string userRole = member.selectedRoles.FirstOrDefault();
 
-            if(!string.IsNullOrEmpty(userRole))
-            {
-                //remove user from their roles
-                if(await _rolesService.RemoveUserFromRolesAsync(btUser, roles)) 
-                {
-                    //add user to the new role
-                    await _rolesService.AddUserToRoleAsync(btUser, userRole);
-                }
-            }
+    //    //    if(!string.IsNullOrEmpty(userRole))
+    //    //    {
+    //    //        //remove user from their roles
+    //    //        if(await _rolesService.RemoveUserFromRolesAsync(btUser, roles)) 
+    //    //        {
+    //    //            //add user to the new role
+    //    //            await _rolesService.AddUserToRoleAsync(btUser, userRole);
+    //    //        }
+    //    //    }
 
-            //navigate back to the view
-            return RedirectToAction(nameof(ManageUserRoles));
-        }
+    //    //    //navigate back to the view
+    //    //    return RedirectToAction(nameof(ManageUserRoles));
+    //    //}
     }
 }

@@ -9,6 +9,7 @@ namespace BugTracker_Backend.Middlewares
         {
             _request = request;
         }
+
         public async Task InvokeAsync(HttpContext context, JwtConfig config, IBTAuthenticationService service)
         {
             //Split the string and grab the token

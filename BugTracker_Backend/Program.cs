@@ -23,15 +23,9 @@ var connectionString = builder.Configuration.GetSection("pgSettings")["pgConnect
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(DataUtility.GetConnectionString(builder.Configuration),
                                                     options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
-
-
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-//builder.Services.AddIdentity<BTUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-//                .AddEntityFrameworkStores<ApplicationDbContext>()
-//                .AddClaimsPrincipalFactory<BTUserClaimsPrincipleFactory>();
 builder.Services.AddControllersWithViews().AddJsonOptions(o => o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
 //A new instance is provided everytime a request is made, however
@@ -50,9 +44,10 @@ builder.Services.AddScoped<IBTLookupService, BTLookupService>();
 builder.Services.AddTransient<IBTDropDownOptionsService, BTDropDownOptionsService>();
 
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+
 builder.Services.AddSwaggerGen( c => 
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "dotnetClaimAuthorization", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Internal Issues", Version = "v1" });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme{
         In=ParameterLocation.Header,
         Description="Please insert token",
@@ -61,6 +56,9 @@ builder.Services.AddSwaggerGen( c =>
         BearerFormat="JWT",
         Scheme = "bearer"
     });
+
+    //This will allow Swagger to recognize the token after the user has authenticated 
+    //to bypass the 401 error
     c.AddSecurityRequirement(new OpenApiSecurityRequirement{
         {
             new OpenApiSecurityScheme{
@@ -81,8 +79,7 @@ builder.Services.AddIdentity<BTUser, IdentityRole>(options => options.SignIn.Req
 
 
 builder.Services.AddScoped<IBTAuthenticationService, BTAuthenticationService>();
-//var authSecretConnectionString = builder.Configuration.GetSection("JwtConfig");
-//builder.Services.Configure<JwtConfig>(authSecretConnectionString);
+
 builder.Services.AddSingleton(builder.Configuration.GetSection(nameof(JwtConfig)).Get<JwtConfig>());
 builder.Services.AddAuthentication(options =>
 {
