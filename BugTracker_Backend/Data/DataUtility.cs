@@ -29,7 +29,7 @@ namespace BugTracker_Backend.Data
         {
             //The default connection string will come from appSettings like usual
             var connectionString = configuration.GetConnectionString("DefaultConnection");
-            //It will be automatically overwritten if we are running on Heroku
+            //It will be automatically overwritten if running on Heroku or Railway
             var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
             return string.IsNullOrEmpty(databaseUrl) ? connectionString : BuildConnectionString(databaseUrl);
         }
