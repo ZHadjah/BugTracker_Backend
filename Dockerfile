@@ -2,12 +2,16 @@
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 
-# copy csproj and restore as distinct layers
-COPY ["BugTracker_Backend.csproj", "./"]
-RUN dotnet restore "BugTracker_Backend.csproj"
+# Copy solution and project files (adjust paths for repo layout)
+COPY ["BugTracker_Backend.sln", "./"]
+COPY ["BugTracker_Backend/BugTracker_Backend.csproj", "BugTracker_Backend/"]
 
-# copy everything else and publish
+# Restore using the solution to keep caching effective
+RUN dotnet restore "BugTracker_Backend.sln"
+
+# Copy the rest of the source and publish
 COPY . .
+WORKDIR /src/BugTracker_Backend
 RUN dotnet publish "BugTracker_Backend.csproj" -c Release -o /app/publish
 
 # Runtime stage
