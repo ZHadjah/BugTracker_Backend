@@ -1,0 +1,14 @@
+bin/
+obj/
+.vs/
+.vscode/
+**/node_modules/
+**/dist/
+**/publish/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.DS_Store
+.git
+.gitignore
